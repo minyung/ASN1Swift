@@ -61,7 +61,8 @@ public extension ASN1Template
 	{
 		for tag in expectedTags
 		{
-			if tag & 0xc0 != 0 // Skip iff not universal
+            if (tag != ASN1Identifier.Tag.anyString)
+                && (tag & 0xc0 != 0) // Skip iff not universal
 			{
 				continue
 			}

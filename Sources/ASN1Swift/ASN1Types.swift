@@ -67,7 +67,8 @@ extension ASN1Tag
 		{
 		case ASN1Identifier.Tag.objectIdentifier:
 			return .oid
-		case ASN1Identifier.Tag.utf8String,
+        case ASN1Identifier.Tag.anyString,
+             ASN1Identifier.Tag.utf8String,
 			 ASN1Identifier.Tag.printableString,
 			 ASN1Identifier.Tag.numericString,
 			 ASN1Identifier.Tag.generalString,
@@ -108,6 +109,8 @@ public struct ASN1Identifier
 		public static let tagMask: UInt8 = 0xff
 		public static let tagNumMask: UInt8 = 0x7f
 		
+        public static let anyString: ASN1Tag = 0xff
+        
 		public static let endOfContent: ASN1Tag = 0x00
 		public static let boolean: ASN1Tag = 0x01
 		public static let integer: ASN1Tag = 0x02
