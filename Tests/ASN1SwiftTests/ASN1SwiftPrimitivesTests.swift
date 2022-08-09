@@ -53,15 +53,6 @@ final class ASN1SwiftPrimitivesTests: XCTestCase
 		let r = try! asn1Decoder.decode(String.self, from: Data(bytes))
 		XCTAssert(r == "")
 	}
-	
-    func testDecoding_anyString() throws
-    {
-        let bytes: [UInt8] = [0x0C, 0x19, 0x6E, 0x65, 0x74, 0x2E, 0x7A, 0x61, 0x63, 0x68, 0x61, 0x72, 0x69, 0x61, 0x64, 0x69, 0x73, 0x2E, 0x63, 0x79, 0x63, 0x6C, 0x65, 0x6D, 0x61, 0x70, 0x73]
-        
-        let asn1Decoder = ASN1Decoder()
-        let r = try! asn1Decoder.decode(String.self, from: Data(bytes), template: ASN1Template.universal(ASN1Identifier.Tag.anyString))
-        XCTAssert(r == "net.zachariadis.cyclemaps")
-    }
     
 	func testDecoding_utf8String() throws
 	{
@@ -71,7 +62,43 @@ final class ASN1SwiftPrimitivesTests: XCTestCase
 		let r = try! asn1Decoder.decode(String.self, from: Data(bytes))
 		XCTAssert(r == "net.zachariadis.cyclemaps")
 	}
-	
+    
+    func testDecoding_anyString_UTF8String() throws
+    {
+        let bytes: [UInt8] = [0x0C, 0x19, 0x6E, 0x65, 0x74, 0x2E, 0x7A, 0x61, 0x63, 0x68, 0x61, 0x72, 0x69, 0x61, 0x64, 0x69, 0x73, 0x2E, 0x63, 0x79, 0x63, 0x6C, 0x65, 0x6D, 0x61, 0x70, 0x73]
+        
+        let asn1Decoder = ASN1Decoder()
+        let r = try! asn1Decoder.decode(String.self, from: Data(bytes), template: ASN1Template.universal(ASN1Identifier.Tag.anyString))
+        XCTAssert(r == "net.zachariadis.cyclemaps")
+    }
+    
+    func testDecoding_anyString_PrintableString() throws
+    {
+        let bytes: [UInt8] = [0x13, 0x19, 0x6E, 0x65, 0x74, 0x2E, 0x7A, 0x61, 0x63, 0x68, 0x61, 0x72, 0x69, 0x61, 0x64, 0x69, 0x73, 0x2E, 0x63, 0x79, 0x63, 0x6C, 0x65, 0x6D, 0x61, 0x70, 0x73]
+        
+        let asn1Decoder = ASN1Decoder()
+        let r = try! asn1Decoder.decode(String.self, from: Data(bytes), template: ASN1Template.universal(ASN1Identifier.Tag.anyString))
+        XCTAssert(r == "net.zachariadis.cyclemaps")
+    }
+    
+    func testDecoding_anyString_IA5String() throws
+    {
+        let bytes: [UInt8] = [0x16, 0x18, 0x34, 0x30, 0x30, 0x31, 0x2D, 0x30, 0x31, 0x2D, 0x30, 0x31, 0x54, 0x30, 0x30, 0x3A, 0x30, 0x30, 0x3A, 0x30, 0x30, 0x2B, 0x30, 0x30, 0x30, 0x30]
+        
+        let asn1Decoder = ASN1Decoder()
+        let r = try! asn1Decoder.decode(String.self, from: Data(bytes), template: ASN1Template.universal(ASN1Identifier.Tag.anyString))
+        XCTAssert(r == "4001-01-01T00:00:00+0000")
+    }
+    
+    func testDecoding_anyString_NotSupportedType() throws
+    {
+        let bytes: [UInt8] = [0x03 /* bitString */, 0x01, 0x34]
+        
+        let asn1Decoder = ASN1Decoder()
+    
+        XCTAssertThrowsError(try asn1Decoder.decode(String.self, from: Data(bytes), template: ASN1Template.universal(ASN1Identifier.Tag.anyString)))
+    }
+    
 	func testDecoding_sequence() throws
 	{
 		let bytes: [UInt8] = [0x30, 0x03, 0x02, 0x01, 0xa0];
@@ -110,6 +137,7 @@ final class ASN1SwiftPrimitivesTests: XCTestCase
 		
 		XCTAssert(integer == 1702)
 	}
+    
 	func testDecoding_integer() throws
 	{
 		let bytes: [UInt8] = [0x02, 0x01, 0xa0];
@@ -119,7 +147,5 @@ final class ASN1SwiftPrimitivesTests: XCTestCase
 		
 		XCTAssert(integer == 0xa0)
 	}
-	
-
 }
 

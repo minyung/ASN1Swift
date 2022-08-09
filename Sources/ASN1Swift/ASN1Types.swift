@@ -151,6 +151,14 @@ public struct ASN1Identifier
 		{
 			return raw
 		}
+        
+        public static func getAnyStringList() -> [ASN1Tag] {
+            return [
+                utf8String,
+                ia5String,
+                printableString
+            ]
+        }
 	}
 	
 	public enum Method: UInt8

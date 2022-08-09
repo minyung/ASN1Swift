@@ -74,8 +74,7 @@ func checkTags(from ptr: UnsafePointer<UInt8>, size: Int, with expectedTags: [AS
 		tlvConstr = tlvConstructed(tag: ptr[0])
 		
         if (tag == ASN1Identifier.Tag.anyString)
-            && (tlvTag == ASN1Identifier.Tag.utf8String
-            || tlvTag == ASN1Identifier.Tag.printableString) {
+            && ASN1Identifier.Tag.getAnyStringList().contains(tlvTag) {
             // 
         } else if tlvTag != tag {
 			throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: [], debugDescription: "Unexpected tag. Inappropriate."))
